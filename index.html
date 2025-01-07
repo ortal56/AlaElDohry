@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ala al dohry</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        .main {
+            width: 100%;
+            height: 100%;
+        }
+        .nav {
+            height: 10%;
+            width: 100%;
+            padding-top: 10px;
+            background-color: aqua;
+            border-radius: 0 0 25% 25%;
+            border-bottom: solid 5px #000;
+        }
+        h1 {
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        h2{
+            direction: rtl;
+        }
+        .body {
+            width: 100%;
+            height: 81%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        img {
+            max-width: 150px;
+            max-height: 150px;
+            margin: 10px;
+            border-radius: 5%;
+        }
+        input {
+            margin: 20px;
+            width: 300px;
+            height: 30px;
+            border: 0;
+            border-bottom: 2px solid #000;
+            transition: 0.5s;
+            outline: none;
+            direction: rtl;
+            text-align: center;
+        }
+        input:hover {
+            border-bottom: 4px solid #33ffd6;
+            color: #009900;
+        }
+        input:focus {
+            border: 4px solid #33ffd6;
+        }
+        textarea {
+            direction:rtl;
+            margin: 20px;
+            width: 500px;
+            max-width: 500px;
+            resize: none;
+            height: 200px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .synthwave-laser-button {
+            position: relative;
+            padding: 20px 60px;
+            font-size: 20px;
+            text-transform: uppercase;
+            color: #fff;
+            background: #004f46;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00ffe0, 0 0 15px #00ffe0, 0 0 25px #00ffe0;
+            box-shadow: inset 0 0 15px #00ffe0, 0 0 20px rgba(0, 255, 224, 0.7);
+            overflow: hidden;
+            border-radius: 10px;
+            z-index: 1;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .synthwave-laser-button::before,
+        .synthwave-laser-button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 225, 0.868), transparent);
+            z-index: -1;
+            filter: blur(5px);
+            transform: translateX(-100%);
+            animation: laser-glow 2.5s infinite linear;
+        }
+        .synthwave-laser-button::after {
+            animation-delay: 1.25s;
+            background: linear-gradient(90deg, transparent,rgb(55, 255, 0), transparent);
+        }
+        @keyframes laser-glow {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        .synthwave-laser-button:hover {
+            transform: translateY(-5px);
+        }
+        .synthwave-laser-button:active {
+            transform: scale(0.95);
+            box-shadow: inset 0 0 15px #00ffe0, 0 0 25px rgb(55, 255, 0);
+        }
+        @media (max-width: 768px) {
+            textarea {
+                width: 90%;
+            }
+            input {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="nav">
+            <h1>على الدوغري</h1>
+        </div>
+        <div class="body" id="body">
+            <h2>صارحني بي جمله من غير كذب</h2>
+            <img src="ico.jpg" alt="Placeholder Image">
+            <input placeholder="Enter your name" type="text" aria-label="Name" id="name">
+            <textarea placeholder="Type your message here..." aria-label="Message" id="mass"></textarea>
+            <button class="synthwave-laser-button" onclick="send()">Done</button>
+        </div>
+    </div>
+    
+    
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+    <script>
+
+        if(localStorage.name != null){
+            let body = document.getElementById("body");
+            
+            body.innerHTML = `
+                <img src="ico.jpg" alt="ico.jpg">
+    <h2>شكرا على صراحتك او بجاحتك على حسب انت كتبت ايه ........</h2>
+            `
+        }
+
+
+const TOKEN = "7796646262:AAHg7LmKELwa5SrjWh3IzqQZcFSd82_XyCc"; // Your Telegram Bot Token
+const CHAT_ID = "1402858789"; // Your Telegram Chat ID
+const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+function send() {
+    const name = document.getElementById("name").value;
+    const mass = document.getElementById("mass").value;
+
+    if (name === "" || mass === "") {
+        alert("Fill in the missing fields.");
+    } else {
+        const message = `
+            Name: ${name}
+Message: ${mass}
+        `;
+        axios.post(URI_API, {
+            chat_id: CHAT_ID,
+            parse_mode: 'html',
+            text: message
+        })
+        .then(response => {
+            localStorage.setItem("name",name)
+            location.reload()
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Error sending the information. Please try again.');
+        });
+    }
+}
+
+    </script>
+</body>
+</html>
